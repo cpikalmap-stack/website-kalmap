@@ -208,6 +208,7 @@ h1{font-size:clamp(38px,6vw,66px);line-height:1.02;letter-spacing:-2px;margin:18
    <div class="contact-card">
     <h3>📍 Visítanos</h3>
     <p>Pasaje B 284, Urb. Carlos Cueto Fernandini, Los Olivos, Lima.</p>
+    <p><strong>📲 Teléfono y WhatsApp:</strong> <a href="https://wa.me/51994384743?text=Hola%2C%20equipo%20de%20Centro%20Psicoterap%C3%A9utico%20Integral%20Kalmap.%20Me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20sus%20servicios%2C%20horarios%20y%20costos.%20%C2%BFPodr%C3%ADan%20orientarme%2C%20por%20favor%3F%20Muchas%20gracias.%20%F0%9F%92%97" target="_blank" rel="noopener">994 384 743</a></p>
     <a class="btn btn-light" target="_blank" rel="noopener" href="https://maps.app.goo.gl/gdA3GKWAo48oqVFb8?g_st=ic">Ver ubicación</a>
    </div>
    <div class="contact-card" id="formulario">
@@ -218,7 +219,7 @@ h1{font-size:clamp(38px,6vw,66px);line-height:1.02;letter-spacing:-2px;margin:18
      <select id="service"><option value="">¿Qué servicio buscas?</option><option>Psicología</option><option>Terapia de lenguaje</option><option>Terapia de aprendizaje</option><option>Atención y concentración</option><option>Terapia ocupacional</option><option>Terapia emocional</option><option>Modificación de conducta</option><option>Pareja y familia</option><option>Evaluación psicológica</option><option>Orientación vocacional</option><option>Orientación y consejería</option><option>No estoy seguro/a</option></select>
      <textarea id="message" placeholder="Cuéntanos brevemente qué necesitas"></textarea>
      <button class="btn btn-primary" type="submit">Enviar solicitud</button>
-     <small style="color:var(--brown-soft)">El botón puede conectarse a tu WhatsApp cuando coloquemos el número oficial de Kalmap.</small>
+     <small style="color:var(--brown-soft)">Al pulsar «Enviar solicitud», se abrirá WhatsApp con un mensaje personalizado con los datos que completes. Tú podrás revisarlo y enviarlo.</small>
     </form>
    </div>
   </div>
@@ -232,6 +233,7 @@ h1{font-size:clamp(38px,6vw,66px);line-height:1.02;letter-spacing:-2px;margin:18
   <span>Bienestar · Desarrollo · Salud mental</span>
  </div>
 </footer>
+<a href="https://wa.me/51994384743?text=Hola%2C%20equipo%20de%20Centro%20Psicoterap%C3%A9utico%20Integral%20Kalmap.%20Me%20gustar%C3%ADa%20recibir%20informaci%C3%B3n%20sobre%20sus%20servicios%2C%20horarios%20y%20costos.%20%C2%BFPodr%C3%ADan%20orientarme%2C%20por%20favor%3F%20Muchas%20gracias.%20%F0%9F%92%97" target="_blank" rel="noopener" aria-label="Escribir a Kalmap por WhatsApp" style="position:fixed;right:18px;bottom:18px;z-index:1000;background:#25D366;color:#fff;text-decoration:none;border-radius:999px;padding:13px 17px;font-weight:700;box-shadow:0 8px 24px #0002">WhatsApp · 994 384 743</a>
 <div class="toast" id="toast"></div>
 <script>
 const toast=(msg)=>{const t=document.getElementById('toast');t.textContent=msg;t.style.display='block';setTimeout(()=>t.style.display='none',3500)};
@@ -246,13 +248,32 @@ document.querySelectorAll('.choice').forEach(btn=>btn.addEventListener('click',(
  };
  r.textContent=map[btn.dataset.result];r.style.display='block';
 }));
-document.getElementById('lead-form').addEventListener('submit',e=>{
+const KALMAP_WHATSAPP = '51994384743';
+const KALMAP_DEFAULT_MESSAGE = '¡Hola, equipo de Centro Psicoterapéutico Integral Kalmap! 🌷\n\nMe gustaría recibir información sobre sus servicios, horarios y costos. ¿Podrían orientarme, por favor?\n\nMuchas gracias. 💗';
+
+document.getElementById('lead-form').addEventListener('submit', e => {
  e.preventDefault();
- const name=document.getElementById('name').value;
- const age=document.getElementById('age').value;
- const service=document.getElementById('service').value||'No especificado';
- const msg=document.getElementById('message').value||'Sin detalle adicional';
- toast('Solicitud preparada para conectar con WhatsApp de Kalmap. Falta colocar el número oficial.');
+ const name = document.getElementById('name').value.trim();
+ const age = document.getElementById('age').value.trim();
+ const service = document.getElementById('service').value.trim() || 'Aún necesito orientación para elegir';
+ const reason = document.getElementById('message').value.trim() || 'Prefiero comentarlo directamente por WhatsApp';
+ const personalMessage = [
+  '¡Hola, equipo de Centro Psicoterapéutico Integral Kalmap! 🌷',
+  '',
+  'Mi nombre es ' + name + ' y me gustaría solicitar orientación.',
+  '',
+  '👤 Nombre: ' + name,
+  '🎂 Edad: ' + (age || 'No indicada'),
+  '💗 Servicio de interés: ' + service,
+  '📝 Motivo de consulta: ' + reason,
+  '',
+  '¿Podrían brindarme información sobre disponibilidad de horarios, costos y cómo agendar una cita?',
+  '',
+  'Muchas gracias. 💗'
+ ].join('\n');
+ const whatsappUrl = 'https://wa.me/' + KALMAP_WHATSAPP + '?text=' + encodeURIComponent(personalMessage);
+ const opened = window.open(whatsappUrl, '_blank', 'noopener,noreferrer');
+ if (!opened) window.location.href = whatsappUrl;
 });
 </script>
 </body>
